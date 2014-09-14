@@ -1,0 +1,17 @@
+{
+	"name": "My extension2",
+	"version": "0.1",
+	"manifest_version": 2,
+	"description": "はじめての拡張",
+
+	"background": {
+		"scripts": ["background.js"]
+	},
+	
+	"content_scripts": [
+		{
+			"matches": ["http://t2gck.com/*", "http://tgck.tumblr.com/archive"],
+			"js": ["jquery.js", "jquery.box2d.min.js", "jquery.selection.js", "myscript.js"]
+		}
+	]
+}
