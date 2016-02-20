@@ -25,6 +25,9 @@ messy things
 	* 001 - うざったいアラートを発報 (browser_action + background script)
 	* 002 - 任意のページに 物理エンジンスクリプトを適用する (コンテントスクリプト)
 
+* h/
+	* コンソール文字列によるアニメーションサンプル
+
 #### License
 
 01〜03: MIT
