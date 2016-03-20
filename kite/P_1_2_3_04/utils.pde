@@ -23,7 +23,10 @@ void keyReleased() {
   if (key == 'w') {
     bShowStroke = !bShowStroke;
   }
-
+  if (key == '1') bDrawVertex[0] = !bDrawVertex[0];
+  if (key == '2') bDrawVertex[1] = !bDrawVertex[1];
+  if (key == '3') bDrawVertex[2] = !bDrawVertex[2];
+  if (key == '4') bDrawVertex[3] = !bDrawVertex[3];
 
 }
 

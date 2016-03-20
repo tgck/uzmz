@@ -6,32 +6,37 @@ void drawShape(float x, float y, float w, float h, int counter){
 
     //// 第一の頂点 : (左上) /////////////////////////////////////////////////
 
-    //fill(0,0,0, 255); // 黒のオパーク
-    fill(255,255,255, 255); // 白のオパーク
-    vertex(x,y);
+    if (bDrawVertex[0]) {
+	    //fill(0,0,0, 255); // 黒のオパーク
+	    fill(255,255,255, 255); // 白のオパーク
+	    vertex(x,y);
+	}
     
     //// 第一の頂点 : (右上) /////////////////////////////////////////////////
-
-    vertex(x+w,y);
-
+    if (bDrawVertex[1]) {
+    	vertex(x+w,y);
+    }
 
 	//// 第三の頂点 : (右下) /////////////////////////////////////////////////
+	int index = counter % colorCount;
 
     // get component color values + aplha
-    int index = counter % colorCount;
-    fill(hueValues[index]*0.5,saturationValues[index],brightnessValues[index],20);
-    //fill(hueValues[index],saturationValues[index],brightnessValues[index],100);
+    if (bDrawVertex[2]) {    
+	    fill(hueValues[index]*0.5,saturationValues[index],brightnessValues[index],20);
+	    //fill(hueValues[index],saturationValues[index],brightnessValues[index],100);
 
-    // fillBlack();
-   
-    vertex(x+w,y+h);
+	    // fillBlack();
+	   
+	    vertex(x+w,y+h);
+	}
     
     //// 第四の頂点 : (左下) /////////////////////////////////////////////////
+    if (bDrawVertex[3]) {
+	    fill(hueValues[index],saturationValues[index],brightnessValues[index],100);
+	    //fill(hueValues[index],saturationValues[index],brightnessValues[index],255);
+	    vertex(x,y+h);
+    }
 
-    fill(hueValues[index],saturationValues[index],brightnessValues[index],100);
-    //fill(hueValues[index],saturationValues[index],brightnessValues[index],255);
-    vertex(x,y+h);
-    
     endShape(CLOSE);
 }
 

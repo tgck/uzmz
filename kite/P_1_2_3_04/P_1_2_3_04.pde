@@ -18,7 +18,8 @@ int actRandomSeed = 0; // 乱数の種
 int tani_cnt = 0;
 boolean bAnimate = true; // アニメーションさせるかどうか
 boolean bShowInfo = false; // デバッグ用表示
-boolean bShowStroke = false; //
+boolean bShowStroke = false;
+boolean[] bDrawVertex = {true, true, true, true}; // 頂点表示の切替; デバッグ
 
 //////////////////////////////////////////////////
 void setup() {
