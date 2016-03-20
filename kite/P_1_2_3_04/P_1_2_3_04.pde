@@ -39,27 +39,15 @@ void draw() {
   randomSeed(actRandomSeed);
 
   // ------ colors ------
-  // create palette 毎フレームカラーパレット作ってる
-  for (int i=0; i<colorCount; i++) {
-    if (i%2 == 0) {
-      hueValues[i] = (int) random(0,360);
-      saturationValues[i] = 100;
-      brightnessValues[i] = (int) random(0,100);
-    } 
-    else {
-      hueValues[i] = 15;  // 青から緑
-      // saturationValues[i] = (int) random(0,20);
-      saturationValues[i] = 100;
-      brightnessValues[i] = 100;
-    }
-  }
+  setupPalette(colorCount);
 
   // ------ area tiling ------
   // count tiles
   int counter = 0;
   // row count and row height
   int rowCount = (int)random(5,30);
-  println("rowCount" + rowCount);
+
+  //println("rowCount" + rowCount);
   float rowHeight = (float)height/(float)rowCount;
 
   // seperate each line in parts  
@@ -88,9 +76,7 @@ void draw() {
     for(int ii=0; ii<partCount; ii++) sumPartsTotal += parts[ii];
 
     pushStyle();
-    if (bShowStroke) {
-      stroke(255);
-    }
+    if (bShowStroke) stroke(255);
 
     // draw rects
     float sumPartsNow = 0;
@@ -121,9 +107,8 @@ void draw() {
 
     popStyle();
 
-    if (bShowInfo) {
-      displayInfo();
-    }
+    // デバッグ情報の表示
+    if (bShowInfo) displayInfo(counter, rowCount);
 
     if (bAnimate) {
       tani_cnt ++;

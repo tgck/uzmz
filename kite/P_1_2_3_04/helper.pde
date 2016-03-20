@@ -5,7 +5,7 @@ void fillGreen(){
 	fill(0,0,255,255);
 }
 
-void displayInfo(){
+void displayInfo(int counter, int rowCount){
 	pushStyle();
 	pushMatrix();
 
@@ -45,6 +45,9 @@ void displayInfo(){
 		text(join( l, "\n" ), x+block_size, y);
 		x = ( x + block_size) + interval;
 	}
+
+	String a = "Counter: " + nf(counter,0) + "\n" + "rowCount: " + nf(rowCount,0);
+	text(a, width - 10, y);
 
 	popMatrix();
 	popStyle();
