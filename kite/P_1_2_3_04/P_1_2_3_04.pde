@@ -100,40 +100,18 @@ void draw() {
         //float h = rowHeight*2.9;
         float h = rowHeight*1.0;
 
+        // 基本図形
+        drawShape(x, y, w, h, counter);
 
-        // ここが肝なのかも - 四角形のグラデーション
-        beginShape();
-
-        //fill(0,0,0, 255); // 黒のオパーク
-        fill(255,255,255, 255); // 白のオパーク
-        vertex(x,y);  // 第一の頂点
-        
-        vertex(x+w,y);  // 第二の頂点
-
-        // get component color values + aplha
-        int index = counter % colorCount;
-        //fill(hueValues[index]*0.5,saturationValues[index],brightnessValues[index],20);
-        //fill(hueValues[index],saturationValues[index],brightnessValues[index],100);
-        fill(0,0,0, 255); // 黒のオパーク
-        vertex(x+w,y+h);  // 第三の頂点 
-        
-        //fill(hueValues[index],saturationValues[index],brightnessValues[index],100);
-        //fill(hueValues[index],saturationValues[index],brightnessValues[index],255);
-        //vertex(x,y+h);    // 第四の頂点
-        
-        endShape(CLOSE);
-        // ここまで肝なのかも
-
-        // 検証用マーカー。フレームのキーとなる座標に赤点を置く
+        // 検証用マーカー
+        //  フレームのキーとなる座標に赤点を置く
         fill(0,255,255,255);
         ellipse(x,y,6,6);
 
       }
-
       counter++;
     }
 
-    //actRandomSeed = (int) random(100000);
     if (bAnimate) {
       tani_cnt ++;
       if (tani_cnt % 444 == 111) {
