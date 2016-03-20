@@ -83,6 +83,11 @@ void draw() {
     float sumPartsTotal = 0;
     for(int ii=0; ii<partCount; ii++) sumPartsTotal += parts[ii];
 
+    pushStyle();
+    if (bShowStroke) {
+      stroke(255);
+    }
+
     // draw rects
     float sumPartsNow = 0;
     for(int ii=0; ii<parts.length; ii++) {
@@ -102,10 +107,8 @@ void draw() {
         //float h = rowHeight*2.9;
         float h = rowHeight*1.0;
 
-        pushStyle();
         // 基本図形
         drawShape(x, y, w, h, counter);
-        popStyle();
 
         // 検証用マーカー
         //  フレームのキーとなる座標に赤点を置く
@@ -114,6 +117,8 @@ void draw() {
       }
       counter++;
     }
+
+    popStyle();
 
     if (bShowInfo) {
       displayInfo();

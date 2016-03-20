@@ -20,6 +20,9 @@ void keyReleased() {
   if (key == 'q') {
     bShowInfo = !bShowInfo;
   }
+  if (key == 'w') {
+    bShowStroke = !bShowStroke;
+  }
 
 
 }
