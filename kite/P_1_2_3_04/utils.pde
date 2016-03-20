@@ -17,6 +17,11 @@ void keyReleased() {
   if (key == 'a') {
     bAnimate = !bAnimate;
   }
+  if (key == 'q') {
+    bShowInfo = !bShowInfo;
+  }
+
+
 }
 
 // timestamp

@@ -17,6 +17,8 @@ int[] brightnessValues = new int[colorCount]; // 明るさ
 int actRandomSeed = 0; // 乱数の種
 int tani_cnt = 0;
 boolean bAnimate = true; // アニメーションさせるかどうか
+boolean bShowInfo = false; // デバッグ用表示
+boolean bShowStroke = false; //
 
 //////////////////////////////////////////////////
 void setup() {
@@ -100,16 +102,21 @@ void draw() {
         //float h = rowHeight*2.9;
         float h = rowHeight*1.0;
 
+        pushStyle();
         // 基本図形
         drawShape(x, y, w, h, counter);
+        popStyle();
 
         // 検証用マーカー
         //  フレームのキーとなる座標に赤点を置く
         fill(0,255,255,255);
         ellipse(x,y,6,6);
-
       }
       counter++;
+    }
+
+    if (bShowInfo) {
+      displayInfo();
     }
 
     if (bAnimate) {
