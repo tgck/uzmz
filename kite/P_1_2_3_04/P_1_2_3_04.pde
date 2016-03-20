@@ -1,21 +1,5 @@
 // P_1_2_3_04.pde
 // 
-// Generative Gestaltung, ISBN: 978-3-87439-759-9
-// First Edition, Hermann Schmidt, Mainz, 2009
-// Hartmut Bohnacker, Benedikt Gross, Julia Laub, Claudius Lazzeroni
-// Copyright 2009 Hartmut Bohnacker, Benedikt Gross, Julia Laub, Claudius Lazzeroni
-//
-// http://www.generative-gestaltung.de
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 /**
  * generates a specific color palette and some random "rect-tilings"
  * 
@@ -31,25 +15,28 @@ import generativedesign.*;
 import processing.opengl.*;
 import java.util.Calendar;
 
-int colorCount = 20;
-int[] hueValues = new int[colorCount];
-int[] saturationValues = new int[colorCount];
-int[] brightnessValues = new int[colorCount];
+int colorCount = 7; // 色の数
+int[] hueValues = new int[colorCount];  // 色相
+int[] saturationValues = new int[colorCount]; // 彩度
+int[] brightnessValues = new int[colorCount]; // 明るさ
 
-int actRandomSeed = 0;
+int actRandomSeed = 0; // 乱数の種
+int tani_cnt = 0;
 
 void setup() {
-  size(800, 800, OPENGL); 
-  colorMode(HSB, 360, 100, 100);
+  size(800, 800, OPENGL);  // OPENGL
+  colorMode(HSB, 360, 100, 100);  // HSV
   noStroke();
 }
+
+// これ毎フレーム書いてるの?
 
 void draw() { 
   background(0,0,0);
   randomSeed(actRandomSeed);
-
+  println("aaa" + actRandomSeed);
   // ------ colors ------
-  // create palette
+  // create palette 毎フレームカラーパレット作ってる
   for (int i=0; i<colorCount; i++) {
     if (i%2 == 0) {
       hueValues[i] = (int) random(0,360);
@@ -57,8 +44,9 @@ void draw() {
       brightnessValues[i] = (int) random(0,100);
     } 
     else {
-      hueValues[i] = 195;
-      saturationValues[i] = (int) random(0,20);
+      hueValues[i] = 15;  // 青から緑
+      // saturationValues[i] = (int) random(0,20);
+      saturationValues[i] = 100;
       brightnessValues[i] = 100;
     }
   }
@@ -68,6 +56,7 @@ void draw() {
   int counter = 0;
   // row count and row height
   int rowCount = (int)random(5,30);
+  println("rowCount" + rowCount);
   float rowHeight = (float)height/(float)rowCount;
 
   // seperate each line in parts  
@@ -101,28 +90,61 @@ void draw() {
       sumPartsNow += parts[ii];
 
       if (random(1.0) < 0.45) {
-        float x = map(sumPartsNow, 0,sumPartsTotal, 0,width)+random(-10,10);
-        float y = rowHeight*i+random(-10,10);
-        float w = map(parts[ii], 0,sumPartsTotal, 0,width)*-1+random(-10,10);
-        float h = rowHeight*1.5;
+        //float x = map(sumPartsNow, 0,sumPartsTotal, 0,width)+random(-10,10);
+        float x = map(sumPartsNow, 0,sumPartsTotal, 0,width);
+        //float y = rowHeight*i+random(-10,10);
+        float y = rowHeight*i;
+        //float w = map(parts[ii], 0,sumPartsTotal, 0,width)*-1+random(-10,10);
+        //float w = map(parts[ii], 0,sumPartsTotal, 0,width)*-1;
+        //float w = 100; // 固定にした方が面白いかも
+        float w = 400;
 
+        //float h = rowHeight*1.5;
+        //float h = rowHeight*2.9;
+        float h = rowHeight*1.0;
+
+
+        // ここが肝なのかも - 四角形のグラデーション
         beginShape();
-        fill(0,0,0, 180);
-        vertex(x,y);
-        vertex(x+w,y);
+
+        //fill(0,0,0, 255); // 黒のオパーク
+        fill(255,255,255, 255); // 白のオパーク
+        vertex(x,y);  // 第一の頂点
+        
+        vertex(x+w,y);  // 第二の頂点
+
         // get component color values + aplha
         int index = counter % colorCount;
-        fill(hueValues[index],saturationValues[index],brightnessValues[index],100);
-        vertex(x+w,y+h);
-        vertex(x,y+h);
+        //fill(hueValues[index]*0.5,saturationValues[index],brightnessValues[index],20);
+        //fill(hueValues[index],saturationValues[index],brightnessValues[index],100);
+        fill(0,0,0, 255); // 黒のオパーク
+        vertex(x+w,y+h);  // 第三の頂点 
+        
+        //fill(hueValues[index],saturationValues[index],brightnessValues[index],100);
+        //fill(hueValues[index],saturationValues[index],brightnessValues[index],255);
+        //vertex(x,y+h);    // 第四の頂点
+        
         endShape(CLOSE);
+        // ここまで肝なのかも
+
+        // 検証用マーカー。フレームのキーとなる座標に赤点を置く
+        fill(0,255,255,255);
+        ellipse(x,y,6,6);
+
       }
 
       counter++;
     }
+
+    //actRandomSeed = (int) random(100000);
+    tani_cnt ++;
+    if (tani_cnt % 444 == 111) {
+      actRandomSeed = (int) random(100000);
+    }
   }  
 } 
 
+// マウスアップでシードを更新
 void mouseReleased() {
   actRandomSeed = (int) random(100000);
 }
