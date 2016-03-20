@@ -3,12 +3,6 @@
 /**
  * generates a specific color palette and some random "rect-tilings"
  * 
- * MOUSE
- * left click          : new composition
- * 
- * KEYS
- * s                   : save png
- * c                   : save color palette
  */
 
 import generativedesign.*;
@@ -22,19 +16,22 @@ int[] brightnessValues = new int[colorCount]; // 明るさ
 
 int actRandomSeed = 0; // 乱数の種
 int tani_cnt = 0;
+boolean bAnimate = true; // アニメーションさせるかどうか
 
+//////////////////////////////////////////////////
 void setup() {
   size(800, 800, OPENGL);  // OPENGL
   colorMode(HSB, 360, 100, 100);  // HSV
   noStroke();
 }
 
-// これ毎フレーム書いてるの?
-
+//////////////////////////////////////////////////
 void draw() { 
   background(0,0,0);
+
   randomSeed(actRandomSeed);
   println("aaa" + actRandomSeed);
+
   // ------ colors ------
   // create palette 毎フレームカラーパレット作ってる
   for (int i=0; i<colorCount; i++) {
@@ -137,39 +134,14 @@ void draw() {
     }
 
     //actRandomSeed = (int) random(100000);
-    tani_cnt ++;
-    if (tani_cnt % 444 == 111) {
-      actRandomSeed = (int) random(100000);
+    if (bAnimate) {
+      tani_cnt ++;
+      if (tani_cnt % 444 == 111) {
+        actRandomSeed = (int) random(100000);
+      }
     }
   }  
 } 
-
-// マウスアップでシードを更新
-void mouseReleased() {
-  actRandomSeed = (int) random(100000);
-}
-
-void keyReleased() {  
-  if (key == 's' || key == 'S') saveFrame(timestamp()+"_####.png");
-  if (key == 'c' || key == 'C') {
-    // ------ save an ase file (adobe swatch export) ------
-    // create palette
-    color[] colors = new color[colorCount];
-    for (int i=0; i<colorCount; i++) {
-      colors[i] = color(hueValues[i],saturationValues[i],brightnessValues[i]);
-    }
-    GenerativeDesign.saveASE(this, colors, timestamp()+".ase");
-  }
-}
-
-// timestamp
-String timestamp() {
-  Calendar now = Calendar.getInstance();
-  return String.format("%1$ty%1$tm%1$td_%1$tH%1$tM%1$tS", now);
-}
-
-
-
 
 
 

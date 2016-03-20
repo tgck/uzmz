@@ -17,3 +17,14 @@ Based on Generative Gestaltung
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+
+
+- 出力に動きはないが、毎フレーム draw している
+- 各要素の描画コアは
+	beginShape();　
+	...
+	endShape(CLOSE);
+
+- 次のランダム
+	
