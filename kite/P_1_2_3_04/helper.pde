@@ -5,7 +5,7 @@ void fillGreen(){
 	fill(0,0,255,255);
 }
 
-void displayInfo(int counter, int rowCount){
+void displayInfo(){
 	pushStyle();
 	pushMatrix();
 
@@ -47,12 +47,13 @@ void displayInfo(int counter, int rowCount){
 	}
 
 	// 中段
-	String str_ct = "FRAGMENT: " + nf(THRESH_FRAGMENT_IF_LESS_THAN,1,3) + "\n" 
-		+ "DRAW: " + nf(THRESH_DRAW_IF_LESS_THAN, 1,3);
+	String str_ct = "FRAGMENT: " + nf(th_frg,1,3) + "\n" 
+		+ "DRAW: " + nf(th_draw, 1,3);
 	text(str_ct, width/2 + 20, y);
 
 	// 右段
-	String str_rt = "Counter: " + nf(counter,0) + "\n" + "rowCount: " + nf(rowCount,0);
+	String str_rt = "rowCount: " + nf(rowCount,0);
+	if (bAnimate) str_rt += "\n A";
 	text(str_rt, width - 10, y);
 
 	popMatrix();

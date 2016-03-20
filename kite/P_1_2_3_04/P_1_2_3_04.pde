@@ -26,16 +26,20 @@ boolean[] bDrawVertex = {true, true, true, true}; // 頂点表示の切替; デ�
 PFont font;
 
 //float THRESH_FRAGMENT = 0.075;
-float THRESH_FRAGMENT_IF_LESS_THAN = 0.001;
-float THRESH_DRAW_IF_LESS_THAN = 0.25;
+float THRESH_FRAGMENT_IF_LESS_THAN = 0.075; // 初期値 : フラグメントする確率
+float THRESH_DRAW_IF_LESS_THAN = 0.25; // 初期値 : 描画をスキップしない確率。1なら全描き
+float th_frg;
+float th_draw;
 
 //////////////////////////////////////////////////
 void setup() {
-  size(800, 800, OPENGL);  // OPENGL
-  colorMode(HSB, 360, 100, 100);  // HSV
+  size(800, 800, OPENGL);
+  colorMode(HSB, 360, 100, 100);
   noStroke();
 
   font = loadFont("AmericanTypewriter-Light-22.vlw");
+  th_frg = THRESH_FRAGMENT_IF_LESS_THAN;
+  th_draw = THRESH_DRAW_IF_LESS_THAN;
 }
 
 //////////////////////////////////////////////////
@@ -48,8 +52,6 @@ void draw() {
   setupPalette(colorCount);
 
   // ------ area tiling ------
-  // count tiles
-  int counter = 0;
 
   // row count and row height
   rowCount = (rowCount == 0) ? (int)random(5,30) : rowCount;
@@ -64,7 +66,7 @@ void draw() {
 
     for(int ii=0; ii<partCount; ii++) {
       // sub fragments or not?
-      if (random(1.0) < THRESH_FRAGMENT_IF_LESS_THAN) { 
+      if (random(1.0) < th_frg) { 
         // 7.5%の確立で
         // フラグメントする
 
@@ -84,15 +86,16 @@ void draw() {
     float sumPartsByLine = 0;
     for(int ii=0; ii<partCount; ii++) sumPartsByLine += parts[ii];
 
+ 
+    // ここから描画ロジック
     pushStyle();
     if (bShowStroke) stroke(255);
-
-    // draw rects
+    int counter = 0; // タイルの色を決定するために使う
     float sumPartsNow = 0;
     for(int ii=0; ii<parts.length; ii++) {
       sumPartsNow += parts[ii];
 
-      if (random(1.0) < THRESH_DRAW_IF_LESS_THAN) {
+      if (random(1.0) < th_draw) {
         //float x = map(sumPartsNow, 0,sumPartsByLine, 0,width)+random(-10,10);
         float x = map(sumPartsNow, 0, sumPartsByLine, 0, width);
         //float y = rowHeight*i+random(-10,10);
@@ -117,23 +120,25 @@ void draw() {
         if (bShowInfo) drawGuideSub(x, y);
       }
       
-
-      counter++; // 次の
-    }
+      counter++;
+    } // 次の図形
 
     popStyle();
+  } // 次の行?  
 
-    // デバッグ情報の表示
-    if (bShowInfo) displayInfo(counter, rowCount);
+  // デバッグ情報の表示
+  if (bShowInfo) displayInfo();
 
-    if (bAnimate) {
-      tani_cnt ++;
-      if (tani_cnt % 444 == 111) {
-        actRandomSeed = (int) random(100000);
-      }
+  if (bAnimate) {
+    tani_cnt ++;
+    if (tani_cnt % 44 == 11) {
+      redraw();
     }
-  }  
+  }
 } 
 
-
+// 再描画
+void redraw() {
+  actRandomSeed = (int) random(100000);
+}
 

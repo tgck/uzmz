@@ -23,10 +23,38 @@ void keyReleased() {
   if (key == 'w') {
     bShowStroke = !bShowStroke;
   }
+  if (key == 'r') {
+    // Redraw
+    redraw();
+  }
+
+  // 頂点の描画モード
   if (key == '1') bDrawVertex[0] = !bDrawVertex[0];
   if (key == '2') bDrawVertex[1] = !bDrawVertex[1];
   if (key == '3') bDrawVertex[2] = !bDrawVertex[2];
   if (key == '4') bDrawVertex[3] = !bDrawVertex[3];
+
+  // デバッグパラメータ
+  switch (keyCode) {
+    case RIGHT:
+      print("right");
+      th_frg = (th_frg >= 1.0) ? 1.0 : th_frg + 0.01; redraw();
+      break;
+    case LEFT:
+      print("left");
+      th_frg = (th_frg <= 0.0) ? 0.0 : th_frg - 0.01; redraw();
+      break;
+    case DOWN:
+      print("down");
+      th_draw = (th_draw >= 1.0) ? 1.0 : th_draw + 0.01; redraw();
+      break;
+    case UP:
+      print("up");
+      th_draw = (th_draw <= 0.0) ? 0.0 : th_draw - 0.01; redraw();
+      break;
+    default:
+      break;
+  }
 }
 
 // timestamp
