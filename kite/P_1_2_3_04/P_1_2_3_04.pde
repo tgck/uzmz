@@ -57,8 +57,11 @@ void draw() {
   rowCount = (rowCount == 0) ? (int)random(5,30) : rowCount;
   float rowHeight = (float)height/(float)rowCount;
 
+  pushMatrix(); // メイン表示領域
+  if (bShowInfo) translate(0, 79, 0); // デバッグ領域分シフトする
+
   // 縦の行の繰り返し
-  // 行ごとに 計算->描画
+  // 行ごとに 計算->描画 を繰り返す
   for(int i=rowCount; i>=0; i--) {
     // how many fragments
     int partCount = i+1;
@@ -86,7 +89,9 @@ void draw() {
     float sumPartsByLine = 0;
     for(int ii=0; ii<partCount; ii++) sumPartsByLine += parts[ii];
 
- 
+    
+    if (bShowInfo) drawGuideLine(rowHeight*i);
+
     // ここから描画ロジック
     pushStyle();
     if (bShowStroke) stroke(255);
@@ -106,8 +111,8 @@ void draw() {
         float w = 400;
 
         //float h = rowHeight*1.5;
-        //float h = rowHeight*2.9;
-        float h = rowHeight*1.0;
+        float h = rowHeight*2.9;
+        //float h = rowHeight*1.0;
 
         // 基本図形
         drawShape(x, y, w, h, counter);
@@ -122,9 +127,9 @@ void draw() {
       
       counter++;
     } // 次の図形
-
     popStyle();
-  } // 次の行?  
+  } // 次の行 
+  popMatrix(); // メイン表示領域
 
   // デバッグ情報の表示
   if (bShowInfo) displayInfo();

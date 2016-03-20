@@ -5,6 +5,7 @@ void fillGreen(){
 	fill(0,0,255,255);
 }
 
+// デバッグ情報の表示
 void displayInfo(){
 	pushStyle();
 	pushMatrix();
@@ -60,20 +61,25 @@ void displayInfo(){
 	popStyle();
 }
 
-// 横線
+// 検証用ホリゾンバー
+void drawGuideLine(float y){
+	pushStyle();
+  	stroke(0,255,255,255);
+  	line(0,y,width,y);
+	popStyle();
+}
+
+// デバッグ用に、要素図形のアウトラインを描く
 void drawGuide(float x, float y){
   pushStyle();
-  // 検証用ホリゾンバー
-  stroke(0,255,255,255);
-  line(x,y,width,y);
-
   // 検証用マーカー
   //  フレームのキーとなる座標に赤点を置く
   fill(0,255,255,255);
   ellipse(x,y,6,6);
   popStyle();
 }
-// 横線
+
+// デバッグ用に、要素図形のアウトラインを描く。非表示図形用。
 void drawGuideSub(float x, float y){
   pushStyle();
   // 検証用マーカー
