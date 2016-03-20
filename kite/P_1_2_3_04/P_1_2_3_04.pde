@@ -16,16 +16,20 @@ int[] brightnessValues = new int[colorCount]; // 明るさ
 
 int actRandomSeed = 0; // 乱数の種
 int tani_cnt = 0;
-boolean bAnimate = true; // アニメーションさせるかどうか
+boolean bAnimate = false; // アニメーションさせるかどうか
 boolean bShowInfo = false; // デバッグ用表示
 boolean bShowStroke = false;
 boolean[] bDrawVertex = {true, true, true, true}; // 頂点表示の切替; デバッグ
+
+PFont font;
 
 //////////////////////////////////////////////////
 void setup() {
   size(800, 800, OPENGL);  // OPENGL
   colorMode(HSB, 360, 100, 100);  // HSV
   noStroke();
+
+  font = loadFont("AmericanTypewriter-Light-22.vlw");
 }
 
 //////////////////////////////////////////////////
@@ -33,7 +37,6 @@ void draw() {
   background(0,0,0);
 
   randomSeed(actRandomSeed);
-  println("aaa" + actRandomSeed);
 
   // ------ colors ------
   // create palette 毎フレームカラーパレット作ってる
@@ -111,10 +114,7 @@ void draw() {
         // 基本図形
         drawShape(x, y, w, h, counter);
 
-        // 検証用マーカー
-        //  フレームのキーとなる座標に赤点を置く
-        fill(0,255,255,255);
-        ellipse(x,y,6,6);
+        if (bShowInfo) drawGuide(x, y);
       }
       counter++;
     }

@@ -27,7 +27,6 @@ void keyReleased() {
   if (key == '2') bDrawVertex[1] = !bDrawVertex[1];
   if (key == '3') bDrawVertex[2] = !bDrawVertex[2];
   if (key == '4') bDrawVertex[3] = !bDrawVertex[3];
-
 }
 
 // timestamp
