@@ -15,6 +15,8 @@ int[] saturationValues = new int[colorCount]; // 彩度
 int[] brightnessValues = new int[colorCount]; // 明るさ
 
 int actRandomSeed = 0; // 乱数の種
+int rowCount = 5; // 縦の分割数 (0ならランダム、それ以外なら固定)
+
 int tani_cnt = 0;
 boolean bAnimate = false; // アニメーションさせるかどうか
 boolean bShowInfo = false; // デバッグ用表示
@@ -22,6 +24,10 @@ boolean bShowStroke = false;
 boolean[] bDrawVertex = {true, true, true, true}; // 頂点表示の切替; デバッグ
 
 PFont font;
+
+//float THRESH_FRAGMENT = 0.075;
+float THRESH_FRAGMENT_IF_LESS_THAN = 0.001;
+float THRESH_DRAW_IF_LESS_THAN = 0.25;
 
 //////////////////////////////////////////////////
 void setup() {
@@ -44,21 +50,24 @@ void draw() {
   // ------ area tiling ------
   // count tiles
   int counter = 0;
-  // row count and row height
-  int rowCount = (int)random(5,30);
 
-  //println("rowCount" + rowCount);
+  // row count and row height
+  rowCount = (rowCount == 0) ? (int)random(5,30) : rowCount;
   float rowHeight = (float)height/(float)rowCount;
 
-  // seperate each line in parts  
+  // 縦の行の繰り返し
+  // 行ごとに 計算->描画
   for(int i=rowCount; i>=0; i--) {
     // how many fragments
     int partCount = i+1;
-    float[] parts = new float[0];
+    float[] parts = new float[0]; // 長さ0の配列
 
     for(int ii=0; ii<partCount; ii++) {
       // sub fragments or not?
-      if (random(1.0) < 0.075) {
+      if (random(1.0) < THRESH_FRAGMENT_IF_LESS_THAN) { 
+        // 7.5%の確立で
+        // フラグメントする
+
         // take care of big values   
         int fragments = (int)random(2,20);
         partCount = partCount + fragments; 
@@ -66,14 +75,14 @@ void draw() {
           parts = append(parts, random(2));
         }              
       }  
-      else {
-        parts = append(parts, random(2,20));   
+      else { // 92.5%の確立で。
+        parts = append(parts, random(2,20));
       }
     }
 
     // add all subparts
-    float sumPartsTotal = 0;
-    for(int ii=0; ii<partCount; ii++) sumPartsTotal += parts[ii];
+    float sumPartsByLine = 0;
+    for(int ii=0; ii<partCount; ii++) sumPartsByLine += parts[ii];
 
     pushStyle();
     if (bShowStroke) stroke(255);
@@ -83,13 +92,13 @@ void draw() {
     for(int ii=0; ii<parts.length; ii++) {
       sumPartsNow += parts[ii];
 
-      if (random(1.0) < 0.45) {
-        //float x = map(sumPartsNow, 0,sumPartsTotal, 0,width)+random(-10,10);
-        float x = map(sumPartsNow, 0,sumPartsTotal, 0,width);
+      if (random(1.0) < THRESH_DRAW_IF_LESS_THAN) {
+        //float x = map(sumPartsNow, 0,sumPartsByLine, 0,width)+random(-10,10);
+        float x = map(sumPartsNow, 0, sumPartsByLine, 0, width);
         //float y = rowHeight*i+random(-10,10);
         float y = rowHeight*i;
-        //float w = map(parts[ii], 0,sumPartsTotal, 0,width)*-1+random(-10,10);
-        //float w = map(parts[ii], 0,sumPartsTotal, 0,width)*-1;
+        //float w = map(parts[ii], 0,sumPartsByLine, 0,width)*-1+random(-10,10);
+        //float w = map(parts[ii], 0,sumPartsByLine, 0,width)*-1;
         //float w = 100; // 固定にした方が面白いかも
         float w = 400;
 
@@ -100,9 +109,16 @@ void draw() {
         // 基本図形
         drawShape(x, y, w, h, counter);
 
+        // デバッグドロー
         if (bShowInfo) drawGuide(x, y);
+      } else {
+        float x = map(sumPartsNow, 0, sumPartsByLine, 0, width);
+        float y = rowHeight*i;
+        if (bShowInfo) drawGuideSub(x, y);
       }
-      counter++;
+      
+
+      counter++; // 次の
     }
 
     popStyle();

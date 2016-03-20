@@ -31,3 +31,11 @@ Based on Generative Gestaltung
 	```
 
 * 次のランダム  
+	* 画面にあらわれる行数 : rowCount : 5 - 30
+	* パレットの内容
+
+* フレーム内で固定
+	* 1行あたりの領域高さ
+	* 
+
+

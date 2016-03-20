@@ -46,8 +46,14 @@ void displayInfo(int counter, int rowCount){
 		x = ( x + block_size) + interval;
 	}
 
-	String a = "Counter: " + nf(counter,0) + "\n" + "rowCount: " + nf(rowCount,0);
-	text(a, width - 10, y);
+	// 中段
+	String str_ct = "FRAGMENT: " + nf(THRESH_FRAGMENT_IF_LESS_THAN,1,3) + "\n" 
+		+ "DRAW: " + nf(THRESH_DRAW_IF_LESS_THAN, 1,3);
+	text(str_ct, width/2 + 20, y);
+
+	// 右段
+	String str_rt = "Counter: " + nf(counter,0) + "\n" + "rowCount: " + nf(rowCount,0);
+	text(str_rt, width - 10, y);
 
 	popMatrix();
 	popStyle();
@@ -63,6 +69,16 @@ void drawGuide(float x, float y){
   // 検証用マーカー
   //  フレームのキーとなる座標に赤点を置く
   fill(0,255,255,255);
+  ellipse(x,y,6,6);
+  popStyle();
+}
+// 横線
+void drawGuideSub(float x, float y){
+  pushStyle();
+  // 検証用マーカー
+  //  フレームのキーとなる座標に赤点(薄い)を置く
+  noFill();
+  stroke(0,255,255,255);
   ellipse(x,y,6,6);
   popStyle();
 }
