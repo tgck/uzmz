@@ -53,7 +53,8 @@ void displayInfo(){
 	text(str_ct, width/2 + 20, y);
 
 	// 右段
-	String str_rt = "rowCount: " + nf(rowCount,0);
+	String str_rt = "rowCount: " + nf(rowCount,0)
+		+ "\n" + "counter: " + nf(counter, 0);
 	if (bAnimate) str_rt += "\n A";
 	text(str_rt, width - 10, y);
 

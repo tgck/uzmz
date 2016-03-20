@@ -16,6 +16,7 @@ int[] brightnessValues = new int[colorCount]; // 明るさ
 
 int actRandomSeed = 0; // 乱数の種
 int rowCount = 5; // 縦の分割数 (0ならランダム、それ以外なら固定)
+int counter = 0; // 要素数の数を格納する
 
 int tani_cnt = 0;
 boolean bAnimate = false; // アニメーションさせるかどうか
@@ -59,6 +60,7 @@ void draw() {
 
   pushMatrix(); // メイン表示領域
   if (bShowInfo) translate(0, 79, 0); // デバッグ領域分シフトする
+  counter = 0;
 
   // 縦の行の繰り返し
   // 行ごとに 計算->描画 を繰り返す
@@ -95,7 +97,7 @@ void draw() {
     // ここから描画ロジック
     pushStyle();
     if (bShowStroke) stroke(255);
-    int counter = 0; // タイルの色を決定するために使う
+    // int counter = 0; // タイルの色を決定するために使う
     float sumPartsNow = 0;
     for(int ii=0; ii<parts.length; ii++) {
       sumPartsNow += parts[ii];

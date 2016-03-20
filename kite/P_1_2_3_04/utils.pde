@@ -37,20 +37,16 @@ void keyReleased() {
   // デバッグパラメータ
   switch (keyCode) {
     case RIGHT:
-      print("right");
-      th_frg = (th_frg >= 1.0) ? 1.0 : th_frg + 0.01; redraw();
+      th_frg = (th_frg >= 0.0125) ? 0.0125 : th_frg + 0.001; redraw();
       break;
     case LEFT:
-      print("left");
       th_frg = (th_frg <= 0.0) ? 0.0 : th_frg - 0.01; redraw();
       break;
     case DOWN:
-      print("down");
-      th_draw = (th_draw >= 1.0) ? 1.0 : th_draw + 0.01; redraw();
+      th_draw = (th_draw <= 0.0) ? 0.0 : th_draw - 0.01; redraw();
       break;
     case UP:
-      print("up");
-      th_draw = (th_draw <= 0.0) ? 0.0 : th_draw - 0.01; redraw();
+      th_draw = (th_draw >= 1.0) ? 1.0 : th_draw + 0.01; redraw();
       break;
     default:
       break;
