@@ -9,16 +9,17 @@ import generativedesign.*;
 import processing.opengl.*;
 import java.util.Calendar;
 
-int colorCount = 7; // 色の数
+int colorCount = 9; // 色の数
 int[] hueValues = new int[colorCount];  // 色相
 int[] saturationValues = new int[colorCount]; // 彩度
 int[] brightnessValues = new int[colorCount]; // 明るさ
 
 int actRandomSeed = 0; // 乱数の種
-int rowCount = 5; // 縦の分割数 (0ならランダム、それ以外なら固定)
+int rowCount = 0; // 縦の分割数 (0ならランダム、それ以外なら固定)
 int counter = 0; // 要素数の数を格納する
 
 int tani_cnt = 0;
+boolean bGray = false;
 boolean bAnimate = false; // アニメーションさせるかどうか
 boolean bShowInfo = false; // デバッグ用表示
 boolean bShowStroke = false;
@@ -26,9 +27,8 @@ boolean[] bDrawVertex = {true, true, true, true}; // 頂点表示の切替; デ�
 
 PFont font;
 
-//float THRESH_FRAGMENT = 0.075;
 float THRESH_FRAGMENT_IF_LESS_THAN = 0.075; // 初期値 : フラグメントする確率
-float THRESH_DRAW_IF_LESS_THAN = 0.25; // 初期値 : 描画をスキップしない確率。1なら全描き
+float THRESH_DRAW_IF_LESS_THAN = 0.45; // 初期値 : 描画をスキップしない確率。1なら全描き
 float th_frg;
 float th_draw;
 
@@ -50,7 +50,11 @@ void draw() {
   randomSeed(actRandomSeed);
 
   // ------ colors ------
-  setupPalette(colorCount);
+  if (bGray) {
+    //setupGrayPalette(colorCount);
+  } else {
+    setupPalette(colorCount);
+  }
 
   // ------ area tiling ------
 
@@ -113,7 +117,7 @@ void draw() {
         float w = 400;
 
         //float h = rowHeight*1.5;
-        float h = rowHeight*2.9;
+        float h = rowHeight*1.0;
         //float h = rowHeight*1.0;
 
         // 基本図形
@@ -131,6 +135,11 @@ void draw() {
     } // 次の図形
     popStyle();
   } // 次の行 
+  // Filter
+  if (bGray) {
+    filter(GRAY); // グレーなフィルタ
+    filter(BLUR, 3);
+  }
   popMatrix(); // メイン表示領域
 
   // デバッグ情報の表示

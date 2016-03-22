@@ -27,6 +27,9 @@ void keyReleased() {
     // Redraw
     redraw();
   }
+  if (key == 'z') {
+    bGray = !bGray;
+  }
 
   // 頂点の描画モード
   if (key == '1') bDrawVertex[0] = !bDrawVertex[0];
