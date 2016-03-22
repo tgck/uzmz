@@ -43,6 +43,7 @@ void setup() {
   size(800, 800, OPENGL);
   colorMode(HSB, 360, 100, 100);
   noStroke();
+  smooth(8);
 
   font = loadFont("AmericanTypewriter-Light-22.vlw");
   th_frg = THRESH_FRAGMENT_IF_LESS_THAN;
@@ -127,7 +128,8 @@ void draw() {
 
         // 基本図形
         // drawShape(x, y, w, h, counter);
-        drawShapeTriangle(x, y, w, h, counter);
+        // drawShapeTriangle(x, y, w, h, counter);
+        drawShapeCircle(x, y, w, h, counter);
 
         // デバッグドロー
         if (bShowInfo) drawGuide(x, y);
