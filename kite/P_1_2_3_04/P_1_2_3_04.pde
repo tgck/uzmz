@@ -28,7 +28,13 @@ boolean[] bDrawVertex = {true, true, true, true}; // 頂点表示の切替; デ�
 PFont font;
 
 float THRESH_FRAGMENT_IF_LESS_THAN = 0.075; // 初期値 : フラグメントする確率
-float THRESH_DRAW_IF_LESS_THAN = 0.45; // 初期値 : 描画をスキップしない確率。1なら全描き
+//float THRESH_DRAW_IF_LESS_THAN = 0.45; // 初期値 : 描画をスキップしない確率。1なら全描き
+float THRESH_DRAW_IF_LESS_THAN = 1.00; // 初期値 : 描画をスキップしない確率。1なら全描き
+//int SZ_SHAPE_WIDTH = 400;
+int SZ_SHAPE_WIDTH = 80;
+//float K_SHAPE_HEIGHT = 1.0; // 要素ブロックの重ね合わせに効く係数
+//float K_SHAPE_HEIGHT = 0.9; // 要素ブロックの重ね合わせに効く係数
+float K_SHAPE_HEIGHT = 1.127; // 要素ブロックの重ね合わせに効く係数
 float th_frg;
 float th_draw;
 
@@ -107,21 +113,21 @@ void draw() {
       sumPartsNow += parts[ii];
 
       if (random(1.0) < th_draw) {
+
         //float x = map(sumPartsNow, 0,sumPartsByLine, 0,width)+random(-10,10);
         float x = map(sumPartsNow, 0, sumPartsByLine, 0, width);
         //float y = rowHeight*i+random(-10,10);
         float y = rowHeight*i;
+
         //float w = map(parts[ii], 0,sumPartsByLine, 0,width)*-1+random(-10,10);
         //float w = map(parts[ii], 0,sumPartsByLine, 0,width)*-1;
         //float w = 100; // 固定にした方が面白いかも
-        float w = 400;
-
-        //float h = rowHeight*1.5;
-        float h = rowHeight*1.0;
-        //float h = rowHeight*1.0;
+        float w = SZ_SHAPE_WIDTH;
+        float h = rowHeight* K_SHAPE_HEIGHT;
 
         // 基本図形
-        drawShape(x, y, w, h, counter);
+        // drawShape(x, y, w, h, counter);
+        drawShapeTriangle(x, y, w, h, counter);
 
         // デバッグドロー
         if (bShowInfo) drawGuide(x, y);

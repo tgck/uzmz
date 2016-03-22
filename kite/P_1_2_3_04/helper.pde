@@ -48,9 +48,13 @@ void displayInfo(){
 	}
 
 	// 中段
-	String str_ct = "FRAGMENT: " + nf(th_frg,1,3) + "\n" 
-		+ "DRAW: " + nf(th_draw, 1,3);
-	text(str_ct, width/2 + 20, y);
+	String str_ct = 
+		"FRAGMENT:  " + nf(th_frg,1,3) + "\n" 
+		+ "DRAW:  " + nf(th_draw, 1,3) + "\n"
+		+ "SZ_SHAPE_W:  " + nf(SZ_SHAPE_WIDTH, 0) + "\n"
+		+ "K_SHAPE_H:  "  + nf(K_SHAPE_HEIGHT, 1, 2);
+
+	text(str_ct, width/2 + 20, 10);
 
 	// 右段
 	String str_rt = "rowCount: " + nf(rowCount,0)

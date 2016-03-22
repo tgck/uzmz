@@ -8,7 +8,7 @@ void setupPalette(int colorCount){
     } 
     else {
       hueValues[i] = 15;  // 青と緑の中間色
-      // saturationValues[i] = (int) random(0,20);
+      //saturationValues[i] = (int) random(0,20);
       saturationValues[i] = 100;
       brightnessValues[i] = 100;
     }
