@@ -15,7 +15,7 @@ int[] saturationValues = new int[colorCount]; // 彩度
 int[] brightnessValues = new int[colorCount]; // 明るさ
 
 int actRandomSeed = 0; // 乱数の種
-int rowCount = 0; // 縦の分割数 (0ならランダム、それ以外なら固定)
+int rowCount = 7; // 縦の分割数 (0ならランダム、それ以外なら固定)
 int counter = 0; // 要素数の数を格納する
 
 int tani_cnt = 0;
@@ -27,7 +27,7 @@ boolean[] bDrawVertex = {true, true, true, true}; // 頂点表示の切替; デ�
 
 PFont font;
 
-float THRESH_FRAGMENT_IF_LESS_THAN = 0.075; // 初期値 : フラグメントする確率
+float THRESH_FRAGMENT_IF_LESS_THAN = 0.035; // 初期値 : フラグメントする確率
 //float THRESH_DRAW_IF_LESS_THAN = 0.45; // 初期値 : 描画をスキップしない確率。1なら全描き
 float THRESH_DRAW_IF_LESS_THAN = 1.00; // 初期値 : 描画をスキップしない確率。1なら全描き
 //int SZ_SHAPE_WIDTH = 400;
@@ -38,9 +38,12 @@ float K_SHAPE_HEIGHT = 1.127; // 要素ブロックの重ね合わせに効く�
 float th_frg;
 float th_draw;
 
+float[] speedByLine = {};
+float kSpeed = 0.5;
+
 //////////////////////////////////////////////////
 void setup() {
-  size(800, 800, OPENGL);
+  size(960, 540, OPENGL);
   colorMode(HSB, 360, 100, 100);
   noStroke();
   smooth(8);
@@ -67,6 +70,13 @@ void draw() {
 
   // row count and row height
   rowCount = (rowCount == 0) ? (int)random(5,30) : rowCount;
+
+  // speedByLine を生成
+  speedByLine = new float[rowCount+1];
+  for (int i=0; i<rowCount+1; i++) {
+    speedByLine[i] = random(-1.0, 1.0);
+  }
+
   float rowHeight = (float)height/(float)rowCount;
 
   pushMatrix(); // メイン表示領域
@@ -76,6 +86,7 @@ void draw() {
   // 縦の行の繰り返し
   // 行ごとに 計算->描画 を繰り返す
   for(int i=rowCount; i>=0; i--) {
+    int myIndex = rowCount - i;
     // how many fragments
     int partCount = i+1;
     float[] parts = new float[0]; // 長さ0の配列
@@ -110,6 +121,16 @@ void draw() {
     if (bShowStroke) stroke(255);
     // int counter = 0; // タイルの色を決定するために使う
     float sumPartsNow = 0;
+
+    pushMatrix(); // 行ごとの動き
+    // int direction = (i % 2 == 0)? 1 : -1;
+    scale(3.8, 1, 1);
+    // translate( direction * tani_cnt, 0, 0); //
+
+    // translate( direction * tani_cnt, 0, 0); // 行ごとにランダムな速さにしたい
+    println("rowCount:" + rowCount + ", i:" + i + ", myIndex:" + myIndex);
+    translate( speedByLine[myIndex] * tani_cnt * kSpeed, 0, 0); // 行ごとにランダムな速さにしたい
+
     for(int ii=0; ii<parts.length; ii++) {
       sumPartsNow += parts[ii];
 
@@ -127,9 +148,9 @@ void draw() {
         float h = rowHeight* K_SHAPE_HEIGHT;
 
         // 基本図形
-        // drawShape(x, y, w, h, counter);
+        drawShape(x, y, w, h, counter);
         // drawShapeTriangle(x, y, w, h, counter);
-        drawShapeCircle(x, y, w, h, counter);
+        // drawShapeCircle(x, y, w, h, counter);
 
         // デバッグドロー
         if (bShowInfo) drawGuide(x, y);
@@ -140,7 +161,8 @@ void draw() {
       }
       
       counter++;
-    } // 次の図形
+    } // 同じ行の中の次の図形
+    popMatrix();
     popStyle();
   } // 次の行 
   // Filter
@@ -155,8 +177,9 @@ void draw() {
 
   if (bAnimate) {
     tani_cnt ++;
-    if (tani_cnt % 44 == 11) {
-      redraw();
+    if (tani_cnt % 4440 == 11) {
+      actRandomSeed++;
+    //  redraw();
     }
   }
 } 
@@ -164,5 +187,6 @@ void draw() {
 // 再描画
 void redraw() {
   actRandomSeed = (int) random(100000);
+
 }
 
