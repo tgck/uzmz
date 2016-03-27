@@ -9,7 +9,7 @@ import generativedesign.*;
 import processing.opengl.*;
 import java.util.Calendar;
 
-int colorCount = 9; // 色の数
+int colorCount = 16; // 色の数
 int[] hueValues = new int[colorCount];  // 色相
 int[] saturationValues = new int[colorCount]; // 彩度
 int[] brightnessValues = new int[colorCount]; // 明るさ
@@ -27,9 +27,9 @@ boolean[] bDrawVertex = {true, true, true, true}; // 頂点表示の切替; デ�
 
 PFont font;
 
-float THRESH_FRAGMENT_IF_LESS_THAN = 0.035; // 初期値 : フラグメントする確率
+float THRESH_FRAGMENT_IF_LESS_THAN = 0.075; // 初期値 : フラグメントする確率
 //float THRESH_DRAW_IF_LESS_THAN = 0.45; // 初期値 : 描画をスキップしない確率。1なら全描き
-float THRESH_DRAW_IF_LESS_THAN = 1.00; // 初期値 : 描画をスキップしない確率。1なら全描き
+float THRESH_DRAW_IF_LESS_THAN = 0.40; // 初期値 : 描画をスキップしない確率。1なら全描き
 //int SZ_SHAPE_WIDTH = 400;
 int SZ_SHAPE_WIDTH = 80;
 //float K_SHAPE_HEIGHT = 1.0; // 要素ブロックの重ね合わせに効く係数
@@ -39,7 +39,7 @@ float th_frg;
 float th_draw;
 
 float[] speedByLine = {};
-float kSpeed = 0.5;
+float kSpeed = 0.05;
 
 //////////////////////////////////////////////////
 void setup() {
@@ -69,7 +69,8 @@ void draw() {
   // ------ area tiling ------
 
   // row count and row height
-  rowCount = (rowCount == 0) ? (int)random(5,30) : rowCount;
+  // rowCount = (rowCount == 0) ? (int)random(5,30) : rowCount;
+  rowCount = 27;
 
   // speedByLine を生成
   speedByLine = new float[rowCount+1];
@@ -124,12 +125,13 @@ void draw() {
 
     pushMatrix(); // 行ごとの動き
     // int direction = (i % 2 == 0)? 1 : -1;
-    scale(3.8, 1, 1);
+    //translate(width/2, height/2, 0);
+    scale(3.8, 1.0, 1); // はみ出してもだいじょうぶなように引き延ばす
     // translate( direction * tani_cnt, 0, 0); //
 
     // translate( direction * tani_cnt, 0, 0); // 行ごとにランダムな速さにしたい
     println("rowCount:" + rowCount + ", i:" + i + ", myIndex:" + myIndex);
-    translate( speedByLine[myIndex] * tani_cnt * kSpeed, 0, 0); // 行ごとにランダムな速さにしたい
+    translate( speedByLine[myIndex] * tani_cnt * kSpeed, -height/2, 0); // 行ごとにランダムな速さにしたい
 
     for(int ii=0; ii<parts.length; ii++) {
       sumPartsNow += parts[ii];
@@ -141,10 +143,10 @@ void draw() {
         //float y = rowHeight*i+random(-10,10);
         float y = rowHeight*i;
 
-        //float w = map(parts[ii], 0,sumPartsByLine, 0,width)*-1+random(-10,10);
-        //float w = map(parts[ii], 0,sumPartsByLine, 0,width)*-1;
-        //float w = 100; // 固定にした方が面白いかも
-        float w = SZ_SHAPE_WIDTH;
+        // float w = map(parts[ii], 0,sumPartsByLine, 0,width)*-1+random(-10,10);
+        float w = map(parts[ii], 0,sumPartsByLine, 0,width)*-1;
+        // float w = 40; // 固定にした方が面白いかも
+        // float w = SZ_SHAPE_WIDTH;
         float h = rowHeight* K_SHAPE_HEIGHT;
 
         // 基本図形
