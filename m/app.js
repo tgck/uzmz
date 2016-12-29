@@ -1,3 +1,96 @@
+// エントリ
+var _arr = [];     // (親ID, 子の配列. max 8個)
+var _ids = []; // 発行済 ID の ストア
+var new_entry = function () {
+  // ID を払い出す
+  var
+    new_id = "";
+
+  // 重複しない ID を保証する
+  do {
+    new_id = uuids();
+  } while ( _ids.indexOf(new_id) >= 0 )
+
+  return {
+    id: new_id,
+    children: []
+  };
+}
+
+// ほる
+var descend = function (id) {
+
+}
+var get_neighbours = function (id) {
+
+}
+// raw レベルなやつ
+var print_trees = function (id, children) {
+}
+var get_children = function (id) {
+}
+var get_root = function () {
+  // プロキシパターン的な
+  if ( _ids.length == 0 ) {
+    var _root;
+    _root = new_entry();
+    _ids.push(_root.id);
+    _arr.push(_root);
+  }
+  return _arr[0];
+}
+var get_root_id = function () {
+  // ガード処理
+  if (_arr.length === 0 ) {
+    get_root();
+  }
+  return _arr[0].id;
+}
+var get_entry = function (id) {
+  return _.find(_arr, ['id', id]);
+}
+var l = function(){
+  return _ids[_ids.length -1] || "";
+}// last
+
+var print_children = function (id) {
+  // for ( child in get_entry(id).children ) {
+  var
+    children = get_entry(id).children,
+    msg1 = "There are [XXX] childs for [YYY]",
+    msg2 = " child[ZZZ]: ";
+  console.log(msg1.replace('XXX', children.length));
+  children.forEach( function(elem, index, array) {
+    console.log(msg2.replace('ZZZ', index) + elem.id);
+  });
+  return;
+}
+var add_child_to = function (id) {
+  var
+    targ = _.find(_arr, ['id', id]),  // なければ undefined
+    child_cnt,
+    entry;
+
+  // id が 異常なら抜ける
+  if ( _ids.indexOf(id) < 0 ) {
+    var msg = "add_child_to: invalid target id [XXX]";
+    console.info(msg.replace('XXX', id));
+    return;
+  }
+  child_cnt = targ.children.length;
+  // child add できるかどうかチェックして、だめなら抜ける
+  // var target = _arr.find(test, id);
+  if ( targ === undefined || child_cnt > 8) {
+    var msg = "add_child_to[XXX1]: can't add child. Maybe the target is invalid or too much children. count[XXX2]";
+    console.info(msg.replace('XXX1', id).replace('XXX2', child_cnt));
+  };
+
+  // 追加　実処理
+  targ.children.push( new_entry());
+
+  return targ;
+}
+
 var vmodel = new Vue({
   el: '#app',
   data: {
