@@ -9,6 +9,9 @@ var vmodel = new Vue({
   },
   ready: function() {
     this.load();
+
+    // とりあえず自動で開始
+    this.init();
   },
   computed: { // for Debug
   	disp: function() {
@@ -16,45 +19,22 @@ var vmodel = new Vue({
     }
   },
   methods: {
-    echo: function(str) {
-      console.log(str);
+    init: function(){
+      console.log("=== init ===");
+      var that = this;
+      var firstObj = new Entry(null);
+
+      // 辞書に push
+      this.store[firstObj.id] = firstObj;
+      console.log('first obj created');
+      // this.makeNewChild(CENTER, null);
+      this.makeNewChild(CENTER, firstObj);
     },
-    save: function() { saveStorage(this.serialize());},
-    load: function() {
-      // var obj = loadStorage();
-      // this.$set('subs', obj.subs);// TODO
-    },
-    serialize: function() {
-      var str = JSON.stringify(this.$data);
-      // TODO: this.$data ではなく、
-      // 原初である this.$data.store を軸に
-      return str;
-    },
-    inspect : function(val){
-    	console.log("subs[" + val + "]:" + this.subs[val]);
-      console.log("relatives[" + val + "]:" + this.relatives[val]);
-    },
-    button: function(idx, $event) {
-      var shift = $event.shiftKey,
-      		ctrl = $event.ctrlKey,
-      		option = $event.altKey;
-      if (ctrl) {
-      	console.log('ctrl key down');
-        return;
-      }
-			if (option) {
-      	console.log('opt key down');
-        this.inspect(idx);
-        return;
-      }
-      if (shift) {
-      	this.makeNewChild(idx, this.id);
-      }
-      return;
-    },
+
     makeNewChild: function(idx, parentEntry) {
 	    var that = this;
-    	console.log("makeNewChild: " + idx);
+      console.log("=== makeNewChild ===");
+      console.log("arg:" + arguments);
 
       // まず id を必要数 はらいだす
       // 実際に必要な id は 9 つではなく 8つ。
@@ -88,10 +68,13 @@ var vmodel = new Vue({
       console.log(this.relatives);
       console.log(this.subs);
       console.log(this.id);
+
+      console.log("=== END makeNewChild ===");
     },
     // 新しいビューを生成して描画する
     drawViewWith: function(obj) {
-      console.log("drawWithChild ... not implemented " + obj.id);
+      console.log("drawViewWith ... not implemented " + obj.id);
+
       // nuesub の取り出し方が肝
       var newsub = BASE.map(function(val) {
         if (val) {
@@ -105,19 +88,59 @@ var vmodel = new Vue({
     },
     // 新しいビューを生成して描画する
     drawViewWithPos: function(obj, index) {
+      console.log("drawViewWithPos.....");
+
     	// obj を使って描画する
       this.$set('posId', obj.id);
       this.$set('subs', obj.relatives);
     },
-    init: function(){
-    	var that = this;
-      var firstObj = new Entry(null);
+    button: function(idx, $event) {
 
-      // 辞書に push
-      this.store[firstObj.id] = firstObj;
-      console.log('first obj created');
-			// this.makeNewChild(CENTER, null);
-      this.makeNewChild(CENTER, firstObj);
+      var shift = $event.shiftKey,
+      		ctrl = $event.ctrlKey,
+      		option = $event.altKey;
+      if (ctrl) {
+      	console.log('ctrl key down');
+        return;
+      }
+			if (option) {
+      	console.log('opt key down');
+        this.inspect(idx);
+        return;
+      }
+      if (shift) {
+      	this.makeNewChild(idx, this.id);
+      }
+      return;
+    },
+
+    //
+    // 固いやつ
+    //
+    echo: function(str) {
+      console.log(str);
+    },
+    save: function() {
+      console.log("save... ");
+      saveStorage(this.serialize());},
+
+    load: function() {
+      console.log("load...NOT IMPLEMENTED !!!");
+      // var obj = loadStorage();
+      // this.$set('subs', obj.subs);// TODO
+
+    },
+    serialize: function() {
+      console.log("serialize...");
+      var str = JSON.stringify(this.$data);
+      // TODO: this.$data ではなく、
+      // 原初である this.$data.store を軸に
+      return str;
+    },
+    inspect : function(val){
+    	console.log("subs[" + val + "]:" + this.subs[val]);
+      console.log("relatives[" + val + "]:" + this.relatives[val]);
     }
-  }
+
+  } // methods end
 });
