@@ -29,6 +29,7 @@ var print_trees = function (id, children) {
 }
 var get_children = function (id) {
 }
+// 常に同じところを指す
 var get_root = function () {
   // プロキシパターン的な
   if ( _ids.length == 0 ) {
@@ -50,8 +51,9 @@ var get_entry = function (id) {
   return _.find(_arr, ['id', id]);
 }
 var l = function(){
+  console.log("current position...");
   return _ids[_ids.length -1] || "";
-}// last
+} // last
 
 var print_children = function (id) {
   // for ( child in get_entry(id).children ) {
@@ -80,17 +82,32 @@ var add_child_to = function (id) {
   child_cnt = targ.children.length;
   // child add できるかどうかチェックして、だめなら抜ける
   // var target = _arr.find(test, id);
-  if ( targ === undefined || child_cnt > 8) {
+  if ( targ === undefined || child_cnt > 7) {
     var msg = "add_child_to[XXX1]: can't add child. Maybe the target is invalid or too much children. count[XXX2]";
     console.info(msg.replace('XXX1', id).replace('XXX2', child_cnt));
+    return;
   };
 
   // 追加　実処理
-  targ.children.push( new_entry());
+  targ.children.push( new_entry() );
 
   return targ;
 }
+////////////////////////////////////////////
+// vue に射影する
+var print_as_map = function () {
+  var cur_id = l(),
+    child_cnt = get_entry(cur_id).children.length,
+    arr;
 
+    arr = Array.from(get_entry(l()).children, function(val){return val.id});
+
+  vmodel.$data.posId = cur_id;
+  vmodel.$data.relatives = arr;
+  vmodel.$data.subs = arr; //
+}
+
+////////////////////////////////////////////
 var vmodel = new Vue({
   el: '#app',
   data: {

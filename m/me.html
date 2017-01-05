@@ -9,7 +9,11 @@
   <!-- テスト -->
   <div class="col-xs-6">
     <div class="box1" style="width:260px">
-      <template v-for="i in [1,2,3,4,5,6,7,8,9]">
+      <template v-for="i in [0,1,2,3]">
+        <textarea v-model="subs[$index]" class="mar gst text" @click="button($index, $event)"></textarea>
+      </template>
+      <textarea v-model="posId" class="mar gst text" @click=""></textarea>
+      <template v-for="i in [4,5,6,7]">
         <textarea v-model="subs[$index]" class="mar gst text" @click="button($index, $event)"></textarea>
       </template>
     </div>
