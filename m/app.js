@@ -19,17 +19,16 @@ var new_entry = function () {
 
 // ほる
 var descend = function (id) {
+}
+// 特に指定せず、ほれるところを掘る
+var descend_some = function () {
+}
 
-}
-var get_neighbours = function (id) {
-
-}
-// raw レベルなやつ
-var print_trees = function (id, children) {
-}
-var get_children = function (id) {
-}
-// 常に同じところを指す
+/**
+ * 大親であるルートオブジェクトを取得する
+ * したがって, 現在地がどこであれ同じオブジェクトが返却される
+ * NOTE: ルートが作成されていない場合は, 作成して返す
+ */
 var get_root = function () {
   // プロキシパターン的な
   if ( _ids.length == 0 ) {
@@ -40,6 +39,11 @@ var get_root = function () {
   }
   return _arr[0];
 }
+/**
+ * ルートオブジェクト(ID) を取得する
+ * 現在地がどこであれ同じオブジェクトが返却される
+ * NOTE: ルートが作成されていない場合は, 作成される
+ */
 var get_root_id = function () {
   // ガード処理
   if (_arr.length === 0 ) {
@@ -47,26 +51,81 @@ var get_root_id = function () {
   }
   return _arr[0].id;
 }
+var pr = get_root_id;
+
+/**
+ * IDを指定してノードを取得する
+ * TODO: 該当無しの場合の挙動を追記
+ */
 var get_entry = function (id) {
   return _.find(_arr, ['id', id]);
 }
-var l = function(){
+var g = get_entry; // ショートカット
+
+// カレントのポジションを返す
+// TODO: スイッチとか
+/**
+ * 現在ノード(ID)を返す
+ * ユーティリティ関数
+ * TODO: 階層堀った時、そこから一段上がった時、ただしく動くか検証
+ */
+var current_node = function () {
   console.log("current position...");
   return _ids[_ids.length -1] || "";
-} // last
+}
+var l = current_node; // ショートカット
 
-var print_children = function (id) {
-  // for ( child in get_entry(id).children ) {
+/**
+ * 現在ノードの子ノード群(ID)を配列で返す
+ * ユーティリティ関数
+ */
+var print_children = function () {
+  return print_children_of( l() );
+}
+/**
+ * 指定したノードの子ノード群(ID)を配列で返す
+ * ユーティリティ関数
+ */
+var print_children_of = function (id) {
   var
     children = get_entry(id).children,
     msg1 = "There are [XXX] childs for [YYY]",
     msg2 = " child[ZZZ]: ";
-  console.log(msg1.replace('XXX', children.length));
+  console.log( msg1.replace('XXX', children.length)
+                    .replace('YYY', id) );
   children.forEach( function(elem, index, array) {
-    console.log(msg2.replace('ZZZ', index) + elem.id);
+    console.log( msg2.replace('ZZZ', index) + elem.id );
   });
   return;
 }
+var pc = print_children;
+
+/**
+ * 指定したノードの、子のノード(obj)を配列で取得する
+ */
+var get_children_of = function (id) {
+  // TODO
+}
+/**
+ * 現在ノードの、子のノード(obj)を配列で取得する
+ */
+var get_children = function () {
+  // TODO
+}
+
+
+/**
+ * 現在のノードに子を一つ追加する
+ * 成功した場合、現在ノード(obj)を返却する
+ */
+var add_child = function() {
+  return add_child_to( l() );
+};
+var ac = add_child; // ショートカット
+/**
+ * 指定したノード(id)に子を一つ追加する
+ * 成功した場合、ターゲットのノード(obj)を返却する
+ */
 var add_child_to = function (id) {
   var
     targ = _.find(_arr, ['id', id]),  // なければ undefined
@@ -95,6 +154,7 @@ var add_child_to = function (id) {
 }
 ////////////////////////////////////////////
 // vue に射影する
+// とりあえずのデバッグ的なユーティリティ
 var print_as_map = function () {
   var cur_id = l(),
     child_cnt = get_entry(cur_id).children.length,
