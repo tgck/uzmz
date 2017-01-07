@@ -1,6 +1,10 @@
 // エントリ
-var _arr = [];     // (親ID, 子の配列. max 8個)
-var _ids = []; // 発行済 ID の ストア
+var
+  _arr = [], // (親ID, 子の配列. max 8個)
+  _ids = [], // 発行済 ID の ストア
+  _pwd = "" // 現在ノード(ID)
+;
+
 var new_entry = function () {
   // ID を払い出す
   var
@@ -36,6 +40,7 @@ var get_root = function () {
     _root = new_entry();
     _ids.push(_root.id);
     _arr.push(_root);
+    _pwd = _root.id;
   }
   return _arr[0];
 }
@@ -70,8 +75,8 @@ var g = get_entry; // ショートカット
  * TODO: 階層堀った時、そこから一段上がった時、ただしく動くか検証
  */
 var current_node = function () {
-  console.log("current position...");
-  return _ids[_ids.length -1] || "";
+  // return _ids[_ids.length -1] || "";
+  return _pwd;
 }
 var l = current_node; // ショートカット
 
@@ -130,7 +135,7 @@ var add_child_to = function (id) {
   var
     targ = _.find(_arr, ['id', id]),  // なければ undefined
     child_cnt,
-    entry;
+    child;
 
   // id が 異常なら抜ける
   if ( _ids.indexOf(id) < 0 ) {
@@ -148,8 +153,11 @@ var add_child_to = function (id) {
   };
 
   // 追加　実処理
-  targ.children.push( new_entry() );
+  var child = new_entry();
+  _ids.push(child.id);
+  _arr.push(child);
 
+  targ.children.push( child );
   return targ;
 }
 ////////////////////////////////////////////
