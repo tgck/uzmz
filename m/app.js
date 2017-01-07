@@ -2,8 +2,12 @@
 var
   _arr = [], // (親ID, 子の配列. max 8個)
   _ids = [], // 発行済 ID の ストア
-  _pwd = "" // 現在ノード(ID)
+  _pwd = "", // 現在ノード(ID)
+  _par = ""  // 親ノード. あると上方向への移動が楽になる　// 未実装
 ;
+var
+  _i = console.log,
+  _bug = console.error;
 
 var new_entry = function () {
   // ID を払い出す
@@ -22,10 +26,38 @@ var new_entry = function () {
 }
 
 // ほる
-var descend = function (id) {
+var descend_to = function (id) {
+  if (typeof id !== 'string') {
+    _i('descend_to: Invalid argument for id');
+    return;
+  }
+  if ( list_children().indexOf(id) < 0 ) {
+    _i('descend_to: No such node[XXX] for child here.'.replace('XXX', id));
+    return;
+  }
+  _i('moved to [XXX] from [YYY].'.replace('XXX', id).replace('YYY', _pwd));
+  _i('         [XXX] has  [YYY] children.'.replace('XXX', id).replace('YYY', count_child_of(id) ));
+  _pwd = id;
 }
 // 特に指定せず、ほれるところを掘る
 var descend_some = function () {
+  var target_child_id;
+  target_child_id = list_children()[0];  // とりあえず第一子
+  descend_to(target_child_id);
+}
+
+var move_to = function (id) {
+  if (typeof id !== 'string') {
+    _bug('move_to: Invalid arg format!');
+    return;
+  }
+  if ( _ids.indexOf(id) < 0 ) {
+    _i('move_to: No such id [XXX]'.replace('XXX', id));
+    return;
+  }
+  _i('moved to [XXX] from [YYY].'.replace('XXX', id).replace('YYY', _pwd));
+  _i('         [XXX] has  [YYY] children.'.replace('XXX', id).replace('YYY', count_child_of(id) ));
+  _pwd = id;
 }
 
 /**
@@ -59,7 +91,7 @@ var get_root_id = function () {
 var pr = get_root_id;
 
 /**
- * IDを指定してノードを取得する
+ * IDを指定してノード(obj)を取得する
  * TODO: 該当無しの場合の挙動を追記
  */
 var get_entry = function (id) {
@@ -96,10 +128,10 @@ var print_children_of = function (id) {
     children = get_entry(id).children,
     msg1 = "There are [XXX] childs for [YYY]",
     msg2 = " child[ZZZ]: ";
-  console.log( msg1.replace('XXX', children.length)
+  _i( msg1.replace('XXX', children.length)
                     .replace('YYY', id) );
   children.forEach( function(elem, index, array) {
-    console.log( msg2.replace('ZZZ', index) + elem.id );
+    _i( msg2.replace('ZZZ', index) + elem.id );
   });
   return;
 }
@@ -109,13 +141,44 @@ var pc = print_children;
  * 指定したノードの、子のノード(obj)を配列で取得する
  */
 var get_children_of = function (id) {
-  // TODO
+  // TODO: test
+  return get_entry(id).children;
 }
 /**
  * 現在ノードの、子のノード(obj)を配列で取得する
  */
 var get_children = function () {
-  // TODO
+  // TODO: test
+  return get_entry(_pwd).children;
+}
+/**
+ * 指定したノードの、子のノード(id)を配列で取得する
+ */
+var list_children_of = function (id) {
+  // TODO: id のチェック
+  var targ = get_entry(id);
+  if ( !targ ) { // 必要ないかも
+    _i('list_children: No such node[XXX]'.replace('XXX', id));
+  }
+  // obj なので変換噛ます
+  return targ.children.map(function(val){ return val['id'] });
+}
+/**
+ * 現在ノードの、子のノード(id)を配列で取得する
+ */
+var list_children = function () {
+  if ( !_pwd ) {
+    _bug('list_children: BUG! Can\'t get current node.');
+  }
+  return list_children_of(_pwd);
+}
+// TODO: test
+var count_child_of = function (id) {
+  if (typeof id !== 'string') {
+    _bug('child_cnt_of: Arg format error!');
+    return;
+  }
+  return get_children_of(id).length;
 }
 
 
@@ -140,7 +203,7 @@ var add_child_to = function (id) {
   // id が 異常なら抜ける
   if ( _ids.indexOf(id) < 0 ) {
     var msg = "add_child_to: invalid target id [XXX]";
-    console.info(msg.replace('XXX', id));
+    _i(msg.replace('XXX', id));
     return;
   }
   child_cnt = targ.children.length;
@@ -148,7 +211,7 @@ var add_child_to = function (id) {
   // var target = _arr.find(test, id);
   if ( targ === undefined || child_cnt > 7) {
     var msg = "add_child_to[XXX1]: can't add child. Maybe the target is invalid or too much children. count[XXX2]";
-    console.info(msg.replace('XXX1', id).replace('XXX2', child_cnt));
+    _i(msg.replace('XXX1', id).replace('XXX2', child_cnt));
     return;
   };
 
