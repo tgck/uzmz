@@ -3,7 +3,6 @@ var
   _arr = [], // (親ID, 子の配列. max 8個)
   _ids = [], // 発行済 ID の ストア
   _pwd = "", // 現在ノード(ID)
-  _par = ""  // 親ノード. あると上方向への移動が楽になる　// 未実装
 ;
 var
   _i = console.log,
@@ -21,6 +20,7 @@ var new_entry = function () {
 
   return {
     id: new_id,
+    parent: {}    // 親オブジェクトなくてもエディタは満足するが、あれば移動の役に立つ
     children: []
   };
 }
@@ -57,9 +57,18 @@ var move_to = function (id) {
   }
   _i('moved to [XXX] from [YYY].'.replace('XXX', id).replace('YYY', _pwd));
   _i('         [XXX] has  [YYY] children.'.replace('XXX', id).replace('YYY', count_child_of(id) ));
+
   _pwd = id;
 }
 
+// TODO: test
+var up = function () {
+  var parent_obj = get_entry(_pwd).parent;
+  if ( !parent_obj ) {
+    _bug('up: No parent!');
+  }
+  move_to( parent_obj.id );
+}
 /**
  * 大親であるルートオブジェクトを取得する
  * したがって, 現在地がどこであれ同じオブジェクトが返却される
@@ -69,7 +78,7 @@ var get_root = function () {
   // プロキシパターン的な
   if ( _ids.length == 0 ) {
     var _root;
-    _root = new_entry();
+    _root = new_entry(); // TODO: parent を指定してobj生成できるようにする
     _ids.push(_root.id);
     _arr.push(_root);
     _pwd = _root.id;
