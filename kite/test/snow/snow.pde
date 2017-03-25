@@ -10,31 +10,38 @@ void setup() {
   // noStroke();
 
   arr = new ArrayList<Snow>();
-  gravity = new PVector(0, 1, 0);
+//  gravity = new PVector(0, 0.4, 0);
+  gravity = new PVector(0, 0.0, 0);
 }
 
 //////////////////////////////////////////////////
 void update(){
-  print("hoge");
   for (Snow sn : arr) {sn.update();}
-
 }
 
 //////////////////////////////////////////////////
 void draw() { 
   
+  // updates ....
   update();
 
-	print(" piyo");
+  // drawers ....
   background(255);
 
+  drawGuide();
+
+  pushStyle();
+  for (Snow sn : arr) { sn.draw();}
+  // filter(BLUR, 5);
+  popStyle();
+}
+//////////////////////////////////////////////////
+void drawGuide(){
+  pushStyle();
   stroke(128);
   noFill();
   rect(width/2, height/2, rad, rad);
-
-  for (Snow sn : arr) {
-    sn.draw();
-  }
+  popStyle();
 }
 
 //////////////////////////////////////////////////
@@ -42,22 +49,34 @@ class Snow {
   PVector _speed;
   PVector _pos;
   float _rad;
+  float _noise_x;
+  int _cnt;
 
   Snow() {
     _rad = random(5, 20);
-    _speed = new PVector(0,10,0);
+    _speed = new PVector(0,1,0);
     _pos = new PVector(random(1.0)*width, 0, random(1.0));
+    _noise_x = random(-3,3);
+    _cnt = 0;
   }
   void update(){
     _speed.add(gravity);
-    _pos.x += _speed.x;
+    _pos.x += _speed.x + _noise_x * (_pos.z)*(_pos.z);
     _pos.y += _speed.y;
     _pos.z += _speed.z;
-    println(":"+ nf(_pos.x, 1,2) + nf(_pos.y,1,2));
+    _rad = map(_pos.z, -1, 1, 10, 100);
+    _cnt++;
+    if (_cnt % 100 == 0) _noise_x = random(-3, 3); // TODO, Deleteする
   }
   void draw() {
-    stroke(0); noFill();
+    // stroke(0); noFill();
+    stroke(getColor()); fill(getColor());
     ellipse(_pos.x, _pos.y, _rad, _rad);
+  }
+  int getColor(){
+    // TODO: Tune!!!!
+    int col = (int)map(_pos.z, -1.0, 1.0, 242, 88);
+    return col;
   }
 }
 

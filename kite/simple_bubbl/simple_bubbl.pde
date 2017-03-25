@@ -4,6 +4,9 @@ int actRandomSeed = 0;
 int rad = 100;
 int colorCount = 7;
 
+int[] hueValues = new int[colorCount];  // 色相
+int[] saturationValues = new int[colorCount]; // 彩度
+int[] brightnessValues = new int[colorCount]; // 明るさ
 
 //////////////////////////////////////////////////
 void setup() {
@@ -15,8 +18,10 @@ void setup() {
 
 //////////////////////////////////////////////////
 void draw() { 
+	
   background(0,0,0);
   // ------ colors ------
+  setupPalette(colorCount);
 
   // ------ area tiling ------
   pushMatrix();
