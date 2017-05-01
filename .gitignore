@@ -9,3 +9,6 @@ heroic/c.out
 kite/xxbubbl/build-tmp
 kite/xxbubbl/data
 light/peasycam_simple/build-tmp
+*.class
+nook/rotate-harai/99_sub_problem/01_multipleView/xx_trash/test2/build-tmp
+nook/rotate-harai/99_sub_problem/01_multipleView/xx_trash/test1/build-tmp
