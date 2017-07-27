@@ -1,4 +1,4 @@
-console.log('this is a p5 hot loading trial')
+import p5 from 'p5'
 
 new p5(($)=>{
   var x = 80,
@@ -12,5 +12,3 @@ new p5(($)=>{
     $.rect(x,y,50,50);
   };
 });
-
-console.log('done')
