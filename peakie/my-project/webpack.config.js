@@ -30,7 +30,17 @@ module.exports = {
         options: {
           name: '[name].[ext]?[hash]'
         }
-      }
+      },
+      {
+          test: require.resolve('p5'),
+          use: [{
+                loader: 'expose-loader',
+                options: 'sketch'
+              },{
+                loader: 'expose-loader',
+                options: 'p5'
+              }]
+          }
     ]
   },
   resolve: {
