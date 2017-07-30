@@ -1,0 +1,8 @@
+{
+    "name": "mine",
+    "version": "0.1",
+    "dependencies": {
+        "osc.js": "2.2.0"
+    }
+}
+

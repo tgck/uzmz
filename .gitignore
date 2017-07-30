@@ -13,3 +13,5 @@ light/peasycam_simple/build-tmp
 nook/rotate-harai/99_sub_problem/01_multipleView/xx_trash/test2/build-tmp
 nook/rotate-harai/99_sub_problem/01_multipleView/xx_trash/test1/build-tmp
 operon/oscjs_vue/node_modules/osc/node_modules/serialport/node_modules/node-pre-gyp/node_modules/npmlog/node_modules
+operon/_retire
+operon/mine/bower_components
